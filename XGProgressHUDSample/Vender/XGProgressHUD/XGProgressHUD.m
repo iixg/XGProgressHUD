@@ -1,6 +1,11 @@
 //  XGProgressHUD.m
 //  Version 1.0.0
 //  Created by ixg on 2022/1/2.
+//  Copyright (c) 2022 ixg.
+//
+//  This source code is licensed under the MIT-style license found in the
+//  LICENSE file in the root directory of this source tree.
+//
 
 #import "XGProgressHUD.h"
 
@@ -16,6 +21,7 @@ static const CGFloat kXGMessageFontSize = 14.0;
 @property (nonatomic, strong) dispatch_queue_t      toastQueue;
 @property (nonatomic, strong) dispatch_semaphore_t  toastSema;
 @property (nonatomic, strong) XGProgressHUD         *loadingHud;
+@property (nonatomic, strong) NSMutableDictionary   *loadingCntDic;
 
 @end
 
@@ -23,29 +29,35 @@ static const CGFloat kXGMessageFontSize = 14.0;
 
 + (instancetype)sharedManager {
     static XGProgressHUD *_shareManager = nil;
-    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _shareManager = [[[self class] alloc] init];
         if (!_shareManager.toastQueue) {
-            _shareManager.toastQueue = dispatch_queue_create("toastSingal", DISPATCH_QUEUE_SERIAL);
+            _shareManager.toastQueue = dispatch_queue_create("xg_toastSingal", DISPATCH_QUEUE_SERIAL);
             _shareManager.toastSema = dispatch_semaphore_create(0);
         }
     });
-
     return _shareManager;
 }
 
-#pragma create HUD
+- (NSMutableDictionary *)loadingCntDic {
+    if (!_loadingCntDic) {
+        _loadingCntDic = [NSMutableDictionary dictionary];
+    }
+    return _loadingCntDic;
+}
+
+#pragma mark - create HUD
 - (XGProgressHUD *)progressHUD:(UIView *)view
-                          type:(XGProgressHUDType)type {
+                          style:(XGProgressHUDStyle)style {
     
+
     XGProgressHUD *hud = [XGProgressHUD showHUDAddedTo:view
                                               animated:YES];
     
     hud.removeFromSuperViewOnHide = YES;
     
-    //custom your hud here
+    //Customize your view according to the type
     hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
     hud.backgroundView.style = MBProgressHUDBackgroundStyleSolidColor;
     hud.backgroundView.color = [UIColor colorWithWhite:0.0f
@@ -59,74 +71,89 @@ static const CGFloat kXGMessageFontSize = 14.0;
     return hud;
 }
 
-#pragma show loading
-- (XGProgressHUD *)showLoadingHUD:(UIView *)view
-                          message:(NSString *)message {
+#pragma mark - Show loading HUD
+- (XGProgressHUD *)showLoadingHUD:(NSString *)message
+                             view:(UIView *)view {
     
     if (loadingCnt <= 0 || !_loadingHud) {
         loadingCnt = 0;
-        _loadingHud = [self progressHUD:view type:XGProgressHUDLoadingType];
+        _loadingHud = [self progressHUD:view style:XGProgressHUDStyleLoading];
         [_loadingHud setMode:MBProgressHUDModeIndeterminate];
     }
-    _loadingHud.userInteractionEnabled = NO;
-
-    _loadingHud.hidden = toastCnt > 0;
     
+    _loadingHud.userInteractionEnabled = YES;
+    _loadingHud.hidden = toastCnt > 0;
     _loadingHud.detailsLabel.text = message;
 
     loadingCnt ++;
-    NSLog(@"showLoadingHUD [%ld]", loadingCnt);
+    
+    [self.loadingCntDic setValue:@(loadingCnt) forKey:view.description];
+    
     __weak typeof(self) weakSelf = self;
-
+    
     weakSelf.loadingHud.completionBlock = ^{
-        
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (strongSelf->loadingCnt <= 0) {
             strongSelf->loadingCnt = 0;
             strongSelf->_loadingHud = nil;
+            [strongSelf.loadingCntDic setValue:@(0) forKey:view.description];
         }
     };
+    
     return _loadingHud;
 }
 
+#pragma mark - Hide loading HUD
 - (void)hideLoadingHUD:(NSString *)message
                   view:(UIView *)view {
-
     loadingCnt --;
-
     if (message) {
         if (loadingCnt <= 0) {
-            [self hideLoadingHUD];
+            [self hideLoadingHUD:view];
         } else {
             _loadingHud.hidden = YES;
         }
         [self showToastHUD:message view:view];
     } else {
         if (loadingCnt <= 0) {
-            [self hideLoadingHUD];
+            [self hideLoadingHUD:view];
         }
     }
 }
 
-#pragma hide loading
-- (void)hideLoadingHUD {
-    [self hideLoadingHUD:YES];
+- (void)hideLoadingHUD:(UIView *)view {
+    [self hideLoadingHUD:nil view:view animated:YES];
 }
 
-- (void)hideLoadingHUD:(BOOL)animated {
-    NSLog(@"<<<<<<<<loadingCnt ===hide [%ld]", loadingCnt);
+- (void)hideLoadingHUD:(NSString *)message
+                  view:(UIView *)view
+              animated:(BOOL)animated {
+    
+    if ([self isMultipleHide:view]) {
+        return;
+    }
+    
     loadingCnt --;
     
     if (loadingCnt <= 0) {
+        [self.loadingCntDic removeAllObjects];
         [_loadingHud hideAnimated:animated];
         loadingCnt = 0;
+        _loadingHud = nil;
     }
-    NSLog(@">>>>>>>>>loadingCnt === hide [%ld]", loadingCnt);
 }
 
+- (BOOL)isMultipleHide:(UIView *)view {
+    NSNumber *loadingCntNumber = self.loadingCntDic[view.description];
+    if (loadingCntNumber.intValue == 0) {
+        [self.loadingCntDic removeObjectForKey:view.description];
+        return YES;
+    }
+    return NO;
+}
 
-#pragma show toast
+#pragma mark - Show toast
 - (void)showToastHUD:(NSString *_Nonnull)message
                 view:(UIView *)view {
 
@@ -149,12 +176,12 @@ static const CGFloat kXGMessageFontSize = 14.0;
     }
     
     toastCnt ++;
-//    NSLog(@">>>>>>>>>toastCnt === [%ld]", toastCnt);
     __weak typeof(self) weakSelf = self;
     
     dispatch_async(_toastQueue, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
-            XGProgressHUD *toastHud = [self progressHUD:view type:XGProgressHUDToastType];
+            XGProgressHUD *toastHud = [self progressHUD:view
+                                                  style:XGProgressHUDStyleToast];
             toastHud.tag = kXGToastTag;
             [toastHud setMode:MBProgressHUDModeText];
             toastHud.detailsLabel.text = message;
@@ -163,7 +190,6 @@ static const CGFloat kXGMessageFontSize = 14.0;
             __weak typeof(toastHud) weakToastHud = toastHud;
 
             weakToastHud.completionBlock = ^{
-                
                 __strong typeof(weakSelf) setongSelf = weakSelf;
                 
                 setongSelf->toastCnt --;
@@ -190,13 +216,13 @@ static const CGFloat kXGMessageFontSize = 14.0;
 @implementation UIView (XGProgressHUD)
 
 - (XGProgressHUD *)xg_showLoadingHUD {
-    return [[XGProgressHUD sharedManager] showLoadingHUD:self
-                                                 message:nil];
+    return [[XGProgressHUD sharedManager] showLoadingHUD:nil
+                                                    view:self];
 }
 
 - (XGProgressHUD *)xg_showLoadingHUD:(NSString *)message {
-    return [[XGProgressHUD sharedManager] showLoadingHUD:self
-                                                 message:message];
+    return [[XGProgressHUD sharedManager] showLoadingHUD:message
+                                                    view:self];
 }
 
 - (void)xg_showToastHUD:(NSString *)message {
@@ -205,16 +231,17 @@ static const CGFloat kXGMessageFontSize = 14.0;
 }
 
 - (void)xg_hideProgressHUD {
-    [[XGProgressHUD sharedManager] hideLoadingHUD];
+    [[XGProgressHUD sharedManager] hideLoadingHUD:self];
 }
 
 - (void)xg_hideProgressHUD:(BOOL)animated {
-    [[XGProgressHUD sharedManager] hideLoadingHUD:animated];
+    [[XGProgressHUD sharedManager] hideLoadingHUD:nil
+                                             view:self
+                                         animated:animated];
 }
 
-
 - (void)xg_hideProgressHUD:(NSString *)message
-                      type:(XGProgressHUDType)type {
+                      style:(XGProgressHUDStyle)style {
     [[XGProgressHUD sharedManager] hideLoadingHUD:message
                                              view:self];
 }

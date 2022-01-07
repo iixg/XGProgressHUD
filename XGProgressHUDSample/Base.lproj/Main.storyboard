@@ -16,72 +16,8 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E5u-He-wtx">
-                                <rect key="frame" x="20" y="150" width="374" height="44"/>
-                                <color key="backgroundColor" systemColor="systemGrayColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="gkT-uQ-QU1"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="show loading"/>
-                                <connections>
-                                    <action selector="showLoadingAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sAI-8h-V4V"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eRw-6h-lUK">
-                                <rect key="frame" x="20" y="227" width="374" height="44"/>
-                                <color key="backgroundColor" systemColor="systemGrayColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="xpI-JA-YLC"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="show loading with message"/>
-                                <connections>
-                                    <action selector="showLoadingWithMessageAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6HM-9v-rdC"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8UP-ai-BD0">
-                                <rect key="frame" x="20" y="381" width="374" height="44"/>
-                                <color key="backgroundColor" systemColor="systemGrayColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="TVd-NR-sVB"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="show toast"/>
-                                <connections>
-                                    <action selector="showToastAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vs4-Jm-YQR"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lar-cx-M1K">
-                                <rect key="frame" x="20" y="304" width="374" height="44"/>
-                                <color key="backgroundColor" systemColor="systemGrayColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="ULz-w5-5gJ"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="show loading with message, return a toast"/>
-                                <connections>
-                                    <action selector="showLoadingWithMessage2Action:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zd2-zQ-0j4"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="eRw-6h-lUK" secondAttribute="trailing" constant="20" id="1GP-rR-wCZ"/>
-                            <constraint firstItem="8UP-ai-BD0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="9Qp-Q5-5ic"/>
-                            <constraint firstItem="E5u-He-wtx" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="106" id="AXJ-0t-rew"/>
-                            <constraint firstItem="E5u-He-wtx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="CSx-YR-baG"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8UP-ai-BD0" secondAttribute="trailing" constant="20" id="GoU-zb-BVE"/>
-                            <constraint firstItem="Lar-cx-M1K" firstAttribute="top" secondItem="eRw-6h-lUK" secondAttribute="bottom" constant="33" id="Gqk-FY-ttU"/>
-                            <constraint firstItem="Lar-cx-M1K" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="XeP-3D-znP"/>
-                            <constraint firstItem="8UP-ai-BD0" firstAttribute="top" secondItem="Lar-cx-M1K" secondAttribute="bottom" constant="33" id="iWj-jM-DMY"/>
-                            <constraint firstItem="eRw-6h-lUK" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="iuE-s3-ukI"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="E5u-He-wtx" secondAttribute="trailing" constant="20" id="tbr-R7-5lH"/>
-                            <constraint firstItem="eRw-6h-lUK" firstAttribute="top" secondItem="E5u-He-wtx" secondAttribute="bottom" constant="33" id="tzr-5G-cJ2"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Lar-cx-M1K" secondAttribute="trailing" constant="20" id="zQh-2e-07L"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -92,9 +28,6 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
