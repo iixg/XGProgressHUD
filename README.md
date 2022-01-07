@@ -52,7 +52,8 @@ When handling time consuming task, ensure that loading and toast can be displaye
 
 You can add the HUD on any view or window. 
 
-###Note
+##Note
+
 1.To use `xg_showLoadingHUD`, you need to use `xg_hideProgressHUD` in the appropriate place, otherwise the HUD will not disappear.
 2.If you exit the current view while the HUD is displaying, you need to actively call 'xg_hideProgressHUD: Animated'. Animated needs to be set to NO.
 
