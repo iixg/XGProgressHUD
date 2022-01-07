@@ -1,6 +1,5 @@
 # XGProgressHUD
 
-#Summary
 `XGProgressHUD` is a subclass of the open source project `MBProgressHUD`.It's a Category of UIView.It can show or hide the HUD.
 When handling time consuming task, ensure that loading and toast can be displayed in sequence without missing or overlapping.
 
