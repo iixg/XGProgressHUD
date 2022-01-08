@@ -1,7 +1,7 @@
 //  XGProgressHUD.h
 //  Version 1.0.0
-//  Created by ixg on 2022/1/2.
-//  Copyright (c) 2022 ixg.
+//  Created by iixg on 2022/1/2.
+//  Copyright (c) 2022 iixg.
 //
 //  This source code is licensed under the MIT-style license found in the
 //  LICENSE file in the root directory of this source tree.

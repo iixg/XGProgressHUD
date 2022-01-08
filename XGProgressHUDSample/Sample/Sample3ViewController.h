@@ -2,7 +2,7 @@
 //  Sample3ViewController.h
 //  XGProgressHUDSample
 //
-//  Created by ixg on 2022/1/5.
+//  Created by iixg on 2022/1/5.
 //
 
 #import <UIKit/UIKit.h>

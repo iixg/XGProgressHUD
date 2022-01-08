@@ -2,7 +2,7 @@
 //  AppDelegate.m
 //  XGProgressHUDSample
 //
-//  Created by ixg on 2022/1/2.
+//  Created by iixg on 2022/1/2.
 //
 
 #import "AppDelegate.h"

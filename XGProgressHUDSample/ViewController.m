@@ -2,7 +2,7 @@
 //  ViewController.m
 //  XGProgressHUDSample
 //
-//  Created by ixg on 2022/1/6.
+//  Created by iixg on 2022/1/6.
 //
 
 #import "ViewController.h"
